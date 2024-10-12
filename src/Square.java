@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public abstract class Square {
 	String name;
 	
@@ -9,5 +11,5 @@ public abstract class Square {
 		return name;
 	}
 	
-	public abstract void doAction(Player player, Board board);
+	public abstract void doAction(Player player, Board board, Scanner scanner);
 }

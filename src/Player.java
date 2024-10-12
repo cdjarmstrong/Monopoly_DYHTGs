@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Player {
 	int totalWalk = 0;
 	int position = 0;
@@ -5,10 +7,19 @@ public class Player {
 	String name;
 	boolean brokeout = false;
 	Money money = new Money(5000);
+	ArrayList<HouseSquare> properties = new ArrayList<>();
 	
 	public Player(int id, String name) {
 		this.id = id;
 		this.name = name;
+	}
+	public void addProperty(HouseSquare property){
+		properties.add(property);
+	}
+	public void printProperties(){
+		for(HouseSquare property : properties){
+			System.out.println(property.getName());
+		}
 	}
 	
 	public int getTotalWalk() {

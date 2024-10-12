@@ -1,4 +1,4 @@
-import java.util.Random;
+import java.util.Scanner;
 
 public class HouseSquare extends Square {
 	int price;
@@ -18,17 +18,33 @@ public class HouseSquare extends Square {
 	}
 	
 	@Override
-	public void doAction(Player player, Board board) {
+	public void doAction(Player player, Board board, Scanner scanner) {
 		if(owner < 0){
-			Util.print(player, player.getName() + ", do you want to buy " + getName() + "?");
-			Random rand = new Random();
-			if(rand.nextBoolean()){
-				Util.print(player, player.getName() + " buy " + getName() + " for " + price);
-				owner = player.getID();
-				player.getMoney().substractMoney(price);
-			}else{
-				Util.print(player, player.getName() + " don't want to buy " + getName());
+			boolean correctinput = false;
+			while(!correctinput){
+				Util.print(player, player.getName() + ", do you want to buy " + getName() + "? y/n");
+				try {
+					String input = scanner.nextLine();
+					if(input.equals("y")){
+						owner = player.getID();
+						player.getMoney().substractMoney(price);
+						Util.print(player, player.getName() + " buys " + getName());
+						Util.print(player, player.getName() + " has the balance: " + player.getMoney().getMoney());
+						player.addProperty(this);
+						correctinput = true;
+					}else if (input.equals("n")){
+						Util.print(player, player.getName() + " doesn't want to buy " + getName());
+						correctinput = true;
+					}else{
+
+						System.out.println("Invalid input, try again.");
+					}
+				} catch (Exception e) {
+					System.out.println("Invalid input, try again.");
+				}
 			}
+			
+			
 		}else{
 			if(owner != player.getID()){
 				int lost = price * 70 / 100;

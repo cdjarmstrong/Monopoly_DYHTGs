@@ -1,14 +1,17 @@
 import java.util.Random;
+import java.util.Scanner;
 
 public class Board {
 	int currentTurn = 0;
 	int totalPlayer = 0;
+	Scanner scanner;
 	Player[] players;
 	Square[] squares = new Square[40];
 	String[] names = new String[] { "House", "Villa", "Town", "City", "Peace", "Village", "Jade", "Soi 4", "White", "Dark" };
 	
-	public Board(int totalPlayer) {
+	public Board(int totalPlayer, Scanner scanner) {
 		players = new Player[totalPlayer];
+		this.scanner = scanner;
 		this.totalPlayer = totalPlayer;
 		for(int i = 0;i < players.length;i++){
 			players[i] = new Player(i, "Player " + (i + 1));
@@ -38,7 +41,7 @@ public class Board {
 		int newPosition = normalizePosition(player.getCurrentPosition() + face);
 		player.setPosition(newPosition);
 		Util.print(player, player.getName() + " goes to " + squares[player.getCurrentPosition()].getName());
-		squares[newPosition].doAction(player, this);
+		squares[newPosition].doAction(player, this, scanner);
 		if(player.getMoney().isBrokeOut()){
 			Util.print(player, player.getName() + " has been broke out!");
 			player.setBrokeOut(true);

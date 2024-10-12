@@ -1,11 +1,11 @@
 import java.util.Scanner;
-
 public class Monopoly {
 	Die die = new Die();
 	Board board;
-	
-	public Monopoly(int totalPlayer) {
-		board = new Board(totalPlayer);
+
+
+	public Monopoly(int totalPlayer, Scanner scanner) {
+		board = new Board(totalPlayer, scanner);
 	}
 	
 	public static void main(String[] args) {
@@ -26,18 +26,50 @@ public class Monopoly {
 				System.err.println("Error: Invalid player count.");
 			}
 		}
+
+		Monopoly game = new Monopoly(totalPlayer, scanner);
+		game.startGame(scanner);
 		scanner.close();
-		Monopoly game = new Monopoly(totalPlayer);
-		game.startGame();
 	}
 	
-	public void startGame() {
+	public void startGame(Scanner scanner) {
 		System.out.println("Game start!");
 		System.out.println("========");
 		while (!isGameEnd() && !board.hasWinner()){
 			if(!board.getCurrentPlayer().isBrokeOut()){
-				int face = board.getCurrentPlayer().tossDie(die);
-				board.movePlayer(board.getCurrentPlayer(), face);
+				Player currentPlayer = board.getCurrentPlayer();
+				String lifeChoice;
+                System.out.println("Press enter to roll die...");
+			    scanner.nextLine();
+				
+
+				int face = currentPlayer.tossDie(die);
+				System.out.println(currentPlayer.getName() + " has the balance: " + currentPlayer.getMoney().getMoney());
+				if(!currentPlayer.properties.isEmpty()){
+					System.out.println(currentPlayer.getName() + " has the properties: ");
+					currentPlayer.printProperties();
+				}
+				
+				board.movePlayer(currentPlayer, face);
+				System.out.println("Would you like to make a questionable life decision? y/n");
+				boolean correctInput = false;
+				while(!correctInput){
+					try {
+						lifeChoice = scanner.nextLine();
+						if(lifeChoice.equals("y")){
+							System.out.println("Good");
+							correctInput = true;
+						}else if (lifeChoice.equals("n")){
+							System.out.println("Alright then, your loss.");
+							correctInput = true;
+						}else{
+							System.out.println("Invalid input, try again.");
+						}
+					} catch (Exception e) {
+						System.out.println("Invalid input, try again.");
+					}
+				}
+				
 			}
 			board.nextTurn();
 		}
@@ -48,6 +80,7 @@ public class Monopoly {
 			System.out.println(board.getMaxMoneyPlayer().getName() + " is won by have most money!");
 		}
 		System.out.println("Game over!");
+		scanner.close();
 	}
 	
 	public boolean isGameEnd() {
